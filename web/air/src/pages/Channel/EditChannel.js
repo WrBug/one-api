@@ -44,6 +44,7 @@ const EditChannel = (props) => {
         other: '',
         model_mapping: '',
         system_prompt: '',
+        system_prompt_mode: 0,
         models: [],
         auto_ban: 1,
         groups: ['default']
@@ -142,6 +143,9 @@ const EditChannel = (props) => {
             }
             if (data.model_mapping !== '') {
                 data.model_mapping = JSON.stringify(JSON.parse(data.model_mapping), null, 2);
+            }
+            if (data.system_prompt_mode === undefined || data.system_prompt_mode === null) {
+                data.system_prompt_mode = 0;
             }
             setInputs(data);
             if (data.auto_ban === 0) {
@@ -510,6 +514,17 @@ const EditChannel = (props) => {
                       value={inputs.system_prompt}
                       autoComplete='new-password'
                     />
+                    <div style={{ marginTop: 10 }}>
+                        <Typography.Text strong>系统提示词方式：</Typography.Text>
+                    </div>
+                    <Select
+                      value={inputs.system_prompt_mode ?? 0}
+                      onChange={value => handleInputChange('system_prompt_mode', value)}
+                      style={{ width: '100%' }}
+                    >
+                        <Select.Option value={0}>替换</Select.Option>
+                        <Select.Option value={1}>追加到开头</Select.Option>
+                    </Select>
                     <Typography.Text style={{
                         color: 'rgba(var(--semi-blue-5), 1)',
                         userSelect: 'none',

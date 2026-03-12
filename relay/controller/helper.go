@@ -177,22 +177,34 @@ func isErrorHappened(meta *meta.Meta, resp *http.Response) bool {
 	return false
 }
 
-func setSystemPrompt(ctx context.Context, request *relaymodel.GeneralOpenAIRequest, prompt string) (reset bool) {
+func setSystemPrompt(ctx context.Context, request *relaymodel.GeneralOpenAIRequest, prompt string, mode int) (reset bool) {
 	if prompt == "" {
 		return false
 	}
 	if len(request.Messages) == 0 {
 		return false
 	}
+	appendMode := mode == 1
 	if request.Messages[0].Role == role.System {
-		request.Messages[0].Content = prompt
-		logger.Infof(ctx, "rewrite system prompt")
-		return true
+		if appendMode {
+			existing := request.Messages[0].StringContent()
+			if existing != "" {
+				request.Messages[0].Content = prompt + "\n\n" + existing
+			} else {
+				request.Messages[0].Content = prompt
+			}
+			logger.Infof(ctx, "append system prompt")
+		} else {
+			request.Messages[0].Content = prompt
+			logger.Infof(ctx, "rewrite system prompt")
+			return true
+		}
+		return false
 	}
 	request.Messages = append([]relaymodel.Message{{
 		Role:    role.System,
 		Content: prompt,
 	}}, request.Messages...)
 	logger.Infof(ctx, "add system prompt")
-	return true
+	return false
 }

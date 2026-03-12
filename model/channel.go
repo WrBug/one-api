@@ -38,6 +38,8 @@ type Channel struct {
 	Priority           *int64  `json:"priority" gorm:"bigint;default:0"`
 	Config             string  `json:"config"`
 	SystemPrompt       *string `json:"system_prompt" gorm:"type:text"`
+	// SystemPromptMode: 0=替换已有 system 消息，1=追加到开头（若有 system 则渠道内容放最前）
+	SystemPromptMode   int     `json:"system_prompt_mode" gorm:"default:0"`
 }
 
 type ChannelConfig struct {

@@ -21,8 +21,8 @@ _✨ Access all LLM through the standard OpenAI API format, easy to deploy & use
   <a href="https://github.com/songquanpeng/one-api/releases/latest">
     <img src="https://img.shields.io/github/v/release/songquanpeng/one-api?color=brightgreen&include_prereleases" alt="release">
   </a>
-  <a href="https://hub.docker.com/repository/docker/justsong/one-api">
-    <img src="https://img.shields.io/docker/pulls/justsong/one-api?color=brightgreen" alt="docker pull">
+  <a href="https://hub.docker.com/repository/docker/wrbug/one-api">
+    <img src="https://img.shields.io/docker/pulls/wrbug/one-api?color=brightgreen" alt="docker pull">
   </a>
   <a href="https://github.com/songquanpeng/one-api/releases/latest">
     <img src="https://img.shields.io/github/downloads/songquanpeng/one-api/total?color=brightgreen&include_prereleases" alt="release">
@@ -89,7 +89,7 @@ _✨ Access all LLM through the standard OpenAI API format, easy to deploy & use
 ### Docker Deployment
 
 Deployment command:
-`docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data justsong/one-api`
+`docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data wrbug/one-api`
 
 Update command: `docker run --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower -cR`
 

@@ -30,11 +30,12 @@ type Meta struct {
 	// OriginModelName is the model name from the raw user request
 	OriginModelName string
 	// ActualModelName is the model name after mapping
-	ActualModelName    string
-	RequestURLPath     string
-	PromptTokens       int // only for DoResponse
-	ForcedSystemPrompt string
-	StartTime          time.Time
+	ActualModelName       string
+	RequestURLPath       string
+	PromptTokens         int // only for DoResponse
+	ForcedSystemPrompt   string
+	ForcedSystemPromptMode int // 0=replace, 1=append
+	StartTime            time.Time
 }
 
 func GetByContext(c *gin.Context) *Meta {
@@ -52,6 +53,7 @@ func GetByContext(c *gin.Context) *Meta {
 		APIKey:             strings.TrimPrefix(c.Request.Header.Get("Authorization"), "Bearer "),
 		RequestURLPath:     c.Request.URL.String(),
 		ForcedSystemPrompt: c.GetString(ctxkey.SystemPrompt),
+		ForcedSystemPromptMode: c.GetInt(ctxkey.SystemPromptMode),
 		StartTime:          time.Now(),
 	}
 	cfg, ok := c.Get(ctxkey.Config)

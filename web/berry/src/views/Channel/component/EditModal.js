@@ -242,6 +242,7 @@ const EditModal = ({ open, channelId, onCancel, onOk }) => {
       }
 
       data.base_url = data.base_url ?? '';
+      data.system_prompt_mode = data.system_prompt_mode ?? 0;
       data.is_edit = true;
       initChannel(data.type);
       setInitialInput(data);
@@ -616,6 +617,23 @@ const EditModal = ({ open, channelId, onCancel, onOk }) => {
                 ) : (
                   <FormHelperText id="helper-tex-channel-system_prompt-label"> {inputPrompt.system_prompt} </FormHelperText>
                 )}
+              </FormControl>
+              <FormControl fullWidth sx={{ ...theme.typography.otherInput }}>
+                <InputLabel id="channel-system_prompt_mode-label">{inputLabel.system_prompt_mode}</InputLabel>
+                <Select
+                  labelId="channel-system_prompt_mode-label"
+                  id="channel-system_prompt_mode"
+                  name="system_prompt_mode"
+                  value={values.system_prompt_mode ?? 0}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  label={inputLabel.system_prompt_mode}
+                >
+                  {defaultConfig.systemPromptModeOptions.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText id="helper-tex-channel-system_prompt_mode-label">{inputPrompt.system_prompt_mode}</FormHelperText>
               </FormControl>
               <DialogActions>
                 <Button onClick={onCancel}>取消</Button>

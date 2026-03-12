@@ -22,8 +22,8 @@ _✨ 通过标准的 OpenAI API 格式访问所有的大模型，开箱即用 �
   <a href="https://github.com/songquanpeng/one-api/releases/latest">
     <img src="https://img.shields.io/github/v/release/songquanpeng/one-api?color=brightgreen&include_prereleases" alt="release">
   </a>
-  <a href="https://hub.docker.com/repository/docker/justsong/one-api">
-    <img src="https://img.shields.io/docker/pulls/justsong/one-api?color=brightgreen" alt="docker pull">
+  <a href="https://hub.docker.com/repository/docker/wrbug/one-api">
+    <img src="https://img.shields.io/docker/pulls/wrbug/one-api?color=brightgreen" alt="docker pull">
   </a>
   <a href="https://github.com/songquanpeng/one-api/releases/latest">
     <img src="https://img.shields.io/github/downloads/songquanpeng/one-api/total?color=brightgreen&include_prereleases" alt="release">
@@ -57,11 +57,11 @@ _✨ 通过标准的 OpenAI API 格式访问所有的大模型，开箱即用 �
 > 根据[《生成式人工智能服务管理暂行办法》](http://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm)的要求，请勿对中国地区公众提供一切未经备案的生成式人工智能服务。
 
 > [!NOTE]
-> 稳定版 / 预览版镜像地址：[justsong/one-api](https://hub.docker.com/repository/docker/justsong/one-api)
-> 或者 [ghcr.io/songquanpeng/one-api](https://github.com/songquanpeng/one-api/pkgs/container/one-api)
+> 稳定版 / 预览版镜像地址：[wrbug/one-api](https://hub.docker.com/repository/docker/wrbug/one-api)
+> 或者 [ghcr.io/wrbug/one-api](https://github.com/WrBug/one-api/pkgs/container/one-api)
 >
-> alpha 版镜像地址：[justsong/one-api-alpha](https://hub.docker.com/repository/docker/justsong/one-api-alpha)
-> 或者 [ghcr.io/songquanpeng/one-api-alpha](https://github.com/songquanpeng/one-api/pkgs/container/one-api-alpha)
+> alpha 版镜像地址：[wrbug/one-api-alpha](https://hub.docker.com/repository/docker/wrbug/one-api-alpha)
+> 或者 [ghcr.io/wrbug/one-api-alpha](https://github.com/WrBug/one-api/pkgs/container/one-api-alpha)
 
 > [!WARNING]
 > 使用 root 用户初次登录系统后，务必修改默认密码 `123456`！
@@ -129,10 +129,10 @@ _✨ 通过标准的 OpenAI API 格式访问所有的大模型，开箱即用 �
 ### 基于 Docker 进行部署
 ```shell
 # 使用 SQLite 的部署命令：
-docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data justsong/one-api
+docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data wrbug/one-api
 # 使用 MySQL 的部署命令，在上面的基础上添加 `-e SQL_DSN="root:123456@tcp(localhost:3306)/oneapi"`，请自行修改数据库连接参数，不清楚如何修改请参见下面环境变量一节。
 # 例如：
-docker run --name one-api -d --restart always -p 3000:3000 -e SQL_DSN="root:123456@tcp(localhost:3306)/oneapi" -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data justsong/one-api
+docker run --name one-api -d --restart always -p 3000:3000 -e SQL_DSN="root:123456@tcp(localhost:3306)/oneapi" -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data wrbug/one-api
 ```
 
 其中，`-p 3000:3000` 中的第一个 `3000` 是宿主机的端口，可以根据需要进行修改。
@@ -141,7 +141,7 @@ docker run --name one-api -d --restart always -p 3000:3000 -e SQL_DSN="root:1234
 
 如果启动失败，请添加 `--privileged=true`，具体参考 https://github.com/songquanpeng/one-api/issues/482 。
 
-如果上面的镜像无法拉取，可以尝试使用 GitHub 的 Docker 镜像，将上面的 `justsong/one-api` 替换为 `ghcr.io/songquanpeng/one-api` 即可。
+如果上面的镜像无法拉取，可以尝试使用 GitHub 的 Docker 镜像，将上面的 `wrbug/one-api` 替换为 `ghcr.io/wrbug/one-api` 即可。
 
 如果你的并发量较大，**务必**设置 `SQL_DSN`，详见下面[环境变量](#环境变量)一节。
 

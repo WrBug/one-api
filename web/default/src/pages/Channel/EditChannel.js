@@ -46,6 +46,7 @@ const EditChannel = () => {
     other: '',
     model_mapping: '',
     system_prompt: '',
+    system_prompt_mode: 0,
     models: [],
     groups: ['default'],
   };
@@ -100,6 +101,9 @@ const EditChannel = () => {
           null,
           2
         );
+      }
+      if (data.system_prompt_mode === undefined || data.system_prompt_mode === null) {
+        data.system_prompt_mode = 0;
       }
       setInputs(data);
       if (data.config !== '') {
@@ -517,6 +521,18 @@ const EditChannel = () => {
                       fontFamily: 'JetBrains Mono, Consolas',
                     }}
                     autoComplete='new-password'
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Form.Select
+                    label={t('channel.edit.system_prompt_mode')}
+                    name='system_prompt_mode'
+                    value={inputs.system_prompt_mode}
+                    onChange={handleInputChange}
+                    options={[
+                      { key: 'replace', value: 0, text: t('channel.edit.system_prompt_mode_replace') },
+                      { key: 'append', value: 1, text: t('channel.edit.system_prompt_mode_append') },
+                    ]}
                   />
                 </Form.Field>
               </>
