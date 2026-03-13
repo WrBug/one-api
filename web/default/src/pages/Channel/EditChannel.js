@@ -65,6 +65,7 @@ const EditChannel = () => {
     user_id: '',
     vertex_ai_project_id: '',
     vertex_ai_adc: '',
+    zhipu_coding_mode: false,
   });
   const handleInputChange = (e, { name, value }) => {
     setInputs((inputs) => ({ ...inputs, [name]: value }));
@@ -300,6 +301,23 @@ const EditChannel = () => {
               />
             </Form.Field>
             {renderChannelTip(inputs.type)}
+
+            {/* 智谱 ChatGLM：Coding 模式开关 */}
+            {inputs.type === 16 && (
+              <Form.Field>
+                <Form.Checkbox
+                  label='Coding 模式（使用 /api/coding/paas/ 接口）'
+                  name='zhipu_coding_mode'
+                  checked={config.zhipu_coding_mode === true}
+                  onChange={(e, { checked }) =>
+                    handleConfigChange(e, {
+                      name: 'zhipu_coding_mode',
+                      value: checked,
+                    })
+                  }
+                />
+              </Form.Field>
+            )}
 
             {/* Azure OpenAI specific fields */}
             {inputs.type === 3 && (

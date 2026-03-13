@@ -31,22 +31,31 @@ func (a *Adaptor) SetVersionByModeName(modelName string) {
 	}
 }
 
+// zhipuAPIPath 返回 paas 或 coding/paas，用于区分标准模式与 coding 模式
+func zhipuAPIPath(meta *meta.Meta) string {
+	if meta.Config.ZhipuCodingMode {
+		return "coding/paas"
+	}
+	return "paas"
+}
+
 func (a *Adaptor) GetRequestURL(meta *meta.Meta) (string, error) {
+	path := zhipuAPIPath(meta)
 	switch meta.Mode {
 	case relaymode.ImagesGenerations:
-		return fmt.Sprintf("%s/api/paas/v4/images/generations", meta.BaseURL), nil
+		return fmt.Sprintf("%s/api/%s/v4/images/generations", meta.BaseURL, path), nil
 	case relaymode.Embeddings:
-		return fmt.Sprintf("%s/api/paas/v4/embeddings", meta.BaseURL), nil
+		return fmt.Sprintf("%s/api/%s/v4/embeddings", meta.BaseURL, path), nil
 	}
 	a.SetVersionByModeName(meta.ActualModelName)
 	if a.APIVersion == "v4" {
-		return fmt.Sprintf("%s/api/paas/v4/chat/completions", meta.BaseURL), nil
+		return fmt.Sprintf("%s/api/%s/v4/chat/completions", meta.BaseURL, path), nil
 	}
 	method := "invoke"
 	if meta.IsStream {
 		method = "sse-invoke"
 	}
-	return fmt.Sprintf("%s/api/paas/v3/model-api/%s/%s", meta.BaseURL, meta.ActualModelName, method), nil
+	return fmt.Sprintf("%s/api/%s/v3/model-api/%s/%s", meta.BaseURL, path, meta.ActualModelName, method), nil
 }
 
 func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Request, meta *meta.Meta) error {

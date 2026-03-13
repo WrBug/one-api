@@ -52,6 +52,8 @@ type ChannelConfig struct {
 	Plugin            string `json:"plugin,omitempty"`
 	VertexAIProjectID string `json:"vertex_ai_project_id,omitempty"`
 	VertexAIADC       string `json:"vertex_ai_adc,omitempty"`
+	// ZhipuCodingMode 为 true 时使用智谱 coding 模式：/api/coding/paas/...
+	ZhipuCodingMode bool `json:"zhipu_coding_mode,omitempty"`
 }
 
 func GetAllChannels(startIdx int, num int, scope string) ([]*Channel, error) {

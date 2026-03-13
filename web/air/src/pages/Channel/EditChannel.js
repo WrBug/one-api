@@ -51,6 +51,7 @@ const EditChannel = (props) => {
     };
     const [batch, setBatch] = useState(false);
     const [autoBan, setAutoBan] = useState(true);
+    const [config, setConfig] = useState({ zhipu_coding_mode: false });
     // const [autoBan, setAutoBan] = useState(true);
     const [inputs, setInputs] = useState(originInputs);
     const [originModelOptions, setOriginModelOptions] = useState([]);
@@ -153,6 +154,9 @@ const EditChannel = (props) => {
             } else {
                 setAutoBan(true);
             }
+            if (data.config !== '' && data.config) {
+                setConfig(typeof data.config === 'string' ? JSON.parse(data.config) : data.config);
+            }
             // console.log(data);
         } else {
             showError(message);
@@ -249,6 +253,7 @@ const EditChannel = (props) => {
         localInputs.auto_ban = autoBan ? 1 : 0;
         localInputs.models = localInputs.models.join(',');
         localInputs.group = localInputs.groups.join(',');
+        localInputs.config = JSON.stringify(config);
         if (isEdit) {
             res = await API.put(`/api/channel/`, {...localInputs, id: parseInt(channelId)});
         } else {
@@ -412,6 +417,17 @@ const EditChannel = (props) => {
                       autoComplete='new-password'
                       optionList={groupOptions}
                     />
+                    {
+                      inputs.type === 16 && (
+                        <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <Checkbox
+                              checked={config.zhipu_coding_mode === true}
+                              onChange={(e) => setConfig({ ...config, zhipu_coding_mode: e.target.checked })}
+                            />
+                            <Typography.Text>Coding 模式（使用 /api/coding/paas/ 接口）</Typography.Text>
+                        </div>
+                      )
+                    }
                     {
                       inputs.type === 18 && (
                         <>

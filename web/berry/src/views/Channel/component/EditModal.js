@@ -22,7 +22,8 @@ import {
   Autocomplete,
   FormHelperText,
   Switch,
-  Checkbox
+  Checkbox,
+  Typography
 } from '@mui/material';
 
 import { Formik } from 'formik';
@@ -554,6 +555,23 @@ const EditModal = ({ open, channelId, onCancel, onOk }) => {
                     </Container>
                   )}
                 </>
+              )}
+
+              {values.type === 16 && (
+                <FormControl fullWidth sx={{ ...theme.typography.otherInput }}>
+                  <Container sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Switch
+                      checked={values.config?.zhipu_coding_mode === true}
+                      onChange={(e) =>
+                        setFieldValue('config', {
+                          ...values.config,
+                          zhipu_coding_mode: e.target.checked
+                        })
+                      }
+                    />
+                    <Typography>Coding 模式（使用 /api/coding/paas/ 接口）</Typography>
+                  </Container>
+                </FormControl>
               )}
 
               {inputLabel.config &&
