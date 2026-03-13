@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
 // third-party
 import Chart from 'react-apexcharts';
@@ -11,12 +11,15 @@ import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowth
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { Box } from '@mui/material';
+import { renderNumber } from 'utils/common';
 
 // ==============================|| DASHBOARD DEFAULT - TOTAL GROWTH BAR CHART ||============================== //
 
-const StatisticalBarChart = ({ isLoading, chartDatas }) => {
+const StatisticalBarChart = ({ isLoading, chartDatas, chartMode = 'quota', onModeChange }) => {
   chartData.options.xaxis.categories = chartDatas.xaxis;
   chartData.series = chartDatas.data;
+  chartData.options.tooltip.y.formatter = (val) =>
+    chartMode === 'token' ? renderNumber(val) : '$' + val;
 
   return (
     <>
@@ -29,6 +32,17 @@ const StatisticalBarChart = ({ isLoading, chartDatas }) => {
               <Grid container alignItems="center" justifyContent="space-between">
                 <Grid item>
                   <Typography variant="h3">统计</Typography>
+                </Grid>
+                <Grid item>
+                  <ToggleButtonGroup
+                    value={chartMode}
+                    exclusive
+                    onChange={(_, newMode) => newMode != null && onModeChange?.(newMode)}
+                    size="small"
+                  >
+                    <ToggleButton value="quota">金额</ToggleButton>
+                    <ToggleButton value="token">Token 量</ToggleButton>
+                  </ToggleButtonGroup>
                 </Grid>
               </Grid>
             </Grid>
@@ -58,7 +72,10 @@ const StatisticalBarChart = ({ isLoading, chartDatas }) => {
 };
 
 StatisticalBarChart.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  chartDatas: PropTypes.object,
+  chartMode: PropTypes.oneOf(['quota', 'token']),
+  onModeChange: PropTypes.func
 };
 
 export default StatisticalBarChart;

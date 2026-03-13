@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import StatisticalLineChartCard from './component/StatisticalLineChartCard';
 import StatisticalBarChart from './component/StatisticalBarChart';
@@ -8,9 +8,13 @@ import { API } from 'utils/api';
 import { showError, calculateQuota, renderNumber } from 'utils/common';
 import UserCard from 'ui-component/cards/UserCard';
 
+const BAR_CHART_MODE_QUOTA = 'quota';
+const BAR_CHART_MODE_TOKEN = 'token';
+
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
-  const [statisticalData, setStatisticalData] = useState([]);
+  const [rawDashboardData, setRawDashboardData] = useState([]);
+  const [barChartMode, setBarChartMode] = useState(BAR_CHART_MODE_TOKEN);
   const [requestChart, setRequestChart] = useState(null);
   const [quotaChart, setQuotaChart] = useState(null);
   const [tokenChart, setTokenChart] = useState(null);
@@ -21,11 +25,11 @@ const Dashboard = () => {
     const { success, message, data } = res.data;
     if (success) {
       if (data) {
+        setRawDashboardData(data);
         let lineData = getLineDataGroup(data);
         setRequestChart(getLineCardOption(lineData, 'RequestCount'));
         setQuotaChart(getLineCardOption(lineData, 'Quota'));
         setTokenChart(getLineCardOption(lineData, 'PromptTokens'));
-        setStatisticalData(getBarDataGroup(data));
       }
     } else {
       showError(message);
@@ -81,7 +85,12 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={8} xs={12}>
-            <StatisticalBarChart isLoading={isLoading} chartDatas={statisticalData} />
+            <StatisticalBarChart
+              isLoading={isLoading}
+              chartDatas={getBarDataGroup(rawDashboardData, barChartMode)}
+              chartMode={barChartMode}
+              onModeChange={setBarChartMode}
+            />
           </Grid>
           <Grid item lg={4} xs={12}>
             <UserCard>
@@ -147,7 +156,7 @@ function getLineDataGroup(statisticalData) {
   });
 }
 
-function getBarDataGroup(data) {
+function getBarDataGroup(data, mode = BAR_CHART_MODE_TOKEN) {
   const lastSevenDays = getLastSevenDays();
   const result = [];
   const map = new Map();
@@ -160,7 +169,11 @@ function getBarDataGroup(data) {
     }
     const index = lastSevenDays.indexOf(item.Day);
     if (index !== -1) {
-      map.get(item.ModelName).data[index] = calculateQuota(item.Quota, 3);
+      const value =
+        mode === BAR_CHART_MODE_TOKEN
+          ? (item.PromptTokens || 0) + (item.CompletionTokens || 0)
+          : calculateQuota(item.Quota, 3);
+      map.get(item.ModelName).data[index] = value;
     }
   }
 
